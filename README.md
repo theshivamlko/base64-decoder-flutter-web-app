@@ -1,4 +1,4 @@
-# base64_encode_decode
+# Base64 Decoder Web App in Flutter
 
 A new Flutter project.
 
