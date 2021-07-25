@@ -1,3 +1,4 @@
+import 'dart:convert' as convert;
 import 'dart:html' as html;
 import 'dart:ui' as ui;
 
@@ -6,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'Base64Decoder.dart';
+
 
 class Base64DecodePage extends StatefulWidget {
   const Base64DecodePage({Key? key}) : super(key: key);
@@ -27,9 +29,8 @@ class _Base64DecodePageState extends State<Base64DecodePage> {
 
   @override
   Widget build(BuildContext context) {
-    print("22222");
+
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(20),
@@ -195,20 +196,12 @@ class _Base64DecodePageState extends State<Base64DecodePage> {
                     height: 50,
                     color: Colors.white,
                     onPressed: () async {
-                      html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
-                      uploadInput.click();
-
-                      uploadInput.onChange.listen((event) {
-                        html.File file = uploadInput.files!.first;
-                        html.FileReader reader = html.FileReader();
-                        reader.readAsText(file);
-
-                        reader.onLoadEnd.listen((event) {}).onData((data) async {
-                          encodedTextAreaElement.value = reader.result.toString();
-                          textAreaElement.text = await Base64Decoder.decodeBase64ToText(encodedTextAreaElement.value!)
-                              .catchError((error) {});
-                        });
-                      });
+                      if(textAreaElement.value!=null)
+                      html.AnchorElement()
+                        ..href = '${Uri.dataFromString(textAreaElement.value!, mimeType: 'text/plain', encoding: convert.utf8)}'
+                        ..download = 'base64-decode-navoki.com.txt'
+                        ..style.display = 'none'
+                        ..click();
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
