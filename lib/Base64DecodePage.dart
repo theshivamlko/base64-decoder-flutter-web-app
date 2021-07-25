@@ -120,8 +120,7 @@ class _Base64DecodePageState extends State<Base64DecodePage> {
                               reader.readAsText(file);
 
                               reader.onLoadEnd.listen((event) {}).onData((data) async {
-                                //      print('uploadInput2 ${reader.result}');
-                                encodedTextAreaElement.value = reader.result.toString();
+                                 encodedTextAreaElement.value = reader.result.toString();
                                 textAreaElement.text =
                                     await Base64Decoder.decodeBase64ToText(encodedTextAreaElement.value!)
                                         .catchError((error) {});
@@ -150,8 +149,7 @@ class _Base64DecodePageState extends State<Base64DecodePage> {
                   StreamBuilder<String>(
                       stream: Base64Decoder.resultStream.stream,
                       builder: (context, snapshot) {
-                        print(snapshot);
-                        if (snapshot.hasError)
+                         if (snapshot.hasError)
                           return Text(
                             snapshot.error.toString(),
                             style: TextStyle(color: errorTextColor),
