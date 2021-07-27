@@ -17,7 +17,7 @@ class Base64DecodePage extends StatefulWidget {
 }
 
 class _Base64DecodePageState extends State<Base64DecodePage> {
-  html.TextAreaElement encodedTextAreaElement = html.TextAreaElement();
+  html.TextAreaElement decodedTextAreaElement = html.TextAreaElement();
   html.TextAreaElement textAreaElement = html.TextAreaElement();
   html.FileUploadInputElement fileUploadInputElement = html.FileUploadInputElement();
 
@@ -37,7 +37,7 @@ class _Base64DecodePageState extends State<Base64DecodePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Base64 Decode', style: TextStyle(color: Colors.black, fontSize: 40, fontWeight: FontWeight.bold)),
+              Text('Base64 Decode', style: TextStyle(color: textColor, fontSize: 40, fontWeight: FontWeight.bold)),
               Divider(),
               Padding(padding: EdgeInsets.all(10)),
               Row(
@@ -55,24 +55,23 @@ class _Base64DecodePageState extends State<Base64DecodePage> {
                     children: [
                       IconButton(
                           onPressed: () {
-                            encodedTextAreaElement.value = null;
+                            decodedTextAreaElement.value = null;
                             textAreaElement.value = null;
                           },
-                          icon: Icon(Icons.refresh)),
+                          icon: Icon(Icons.refresh,color: accentIconColor,)),
                       IconButton(
                           onPressed: () {
-                            textAreaElement.select();
+                            decodedTextAreaElement.select();
                             html.document.execCommand("copy");
                           },
-                          icon: Icon(Icons.copy))
+                          icon: Icon(Icons.copy,color: accentIconColor,))
                     ],
                   ),
                 ],
               ),
               Container(
                   height: 300,
-                  decoration: BoxDecoration(border: Border.all(width: 1)),
-                  child: HtmlElementView(viewType: encodedTextAreaElement.name)),
+                  child: HtmlElementView(viewType: decodedTextAreaElement.name)),
               Padding(padding: EdgeInsets.all(20)),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -85,9 +84,9 @@ class _Base64DecodePageState extends State<Base64DecodePage> {
                         height: 50,
                         color: buttonColor,
                         onPressed: () async {
-                          if (encodedTextAreaElement.value != null && encodedTextAreaElement.value!.trim().isNotEmpty)
-                            textAreaElement.text =
-                                await Base64Decoder.decodeBase64ToText(encodedTextAreaElement.value!.trim())
+                          if (decodedTextAreaElement.value != null && decodedTextAreaElement.value!.trim().isNotEmpty)
+                            textAreaElement.value =
+                                await Base64Decoder.decodeBase64ToText(decodedTextAreaElement.value!.trim())
                                     .catchError((error) {});
                         },
                         child: Row(
@@ -120,9 +119,10 @@ class _Base64DecodePageState extends State<Base64DecodePage> {
                               reader.readAsText(file);
 
                               reader.onLoadEnd.listen((event) {}).onData((data) async {
-                                 encodedTextAreaElement.value = reader.result.toString();
-                                textAreaElement.text =
-                                    await Base64Decoder.decodeBase64ToText(encodedTextAreaElement.value!)
+                                print('onLoadEnd');
+                                 decodedTextAreaElement.value = reader.result.toString();
+                                textAreaElement.value =
+                                    await Base64Decoder.decodeBase64ToText(decodedTextAreaElement.value!)
                                         .catchError((error) {});
                               });
                             });
@@ -177,14 +177,13 @@ class _Base64DecodePageState extends State<Base64DecodePage> {
                             textAreaElement.select();
                             html.document.execCommand("copy");
                           },
-                          icon: Icon(Icons.copy))
+                          icon: Icon(Icons.copy,color: accentIconColor,))
                     ],
                   ),
                 ],
               ),
               Container(
                   height: 300,
-                  decoration: BoxDecoration(border: Border.all(width: 1)),
                   child: HtmlElementView(viewType: textAreaElement.name)),
               Center(
                 child: Container(
@@ -226,25 +225,19 @@ class _Base64DecodePageState extends State<Base64DecodePage> {
   }
 
   void init() {
-    encodedTextAreaElement = html.TextAreaElement()
-      ..required = true
-      ..style.border = 'none';
-    encodedTextAreaElement.placeholder = 'Enter base64 Encoded data';
-    encodedTextAreaElement.name = 'encoded-text-area';
-    encodedTextAreaElement.style.fontFamily = 'Open sans';
-    encodedTextAreaElement.style.fontSize = '16px';
+    decodedTextAreaElement = html.TextAreaElement()
+      ..required = true;
+    decodedTextAreaElement.placeholder = 'Enter base64 Encoded data';
+    decodedTextAreaElement.name = 'decoded-text-area';
 
     textAreaElement = html.TextAreaElement()
-      ..required = true
-      ..style.border = 'none';
+      ..required = true ;
     textAreaElement.placeholder = 'Decoded data';
     textAreaElement.name = 'text-area';
-    textAreaElement.style.fontFamily = 'Open sans';
-    textAreaElement.style.fontSize = '16px';
 
     fileUploadInputElement.name = 'file-upload';
 
-    ui.platformViewRegistry.registerViewFactory(encodedTextAreaElement.name, (int id) => encodedTextAreaElement);
+    ui.platformViewRegistry.registerViewFactory(decodedTextAreaElement.name, (int id) => decodedTextAreaElement);
     ui.platformViewRegistry.registerViewFactory(textAreaElement.name, (int id) => textAreaElement);
     ui.platformViewRegistry.registerViewFactory(fileUploadInputElement.name!, (int id) => fileUploadInputElement);
   }
