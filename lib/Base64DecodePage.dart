@@ -3,7 +3,6 @@ import 'dart:html' as html;
 import 'dart:ui' as ui;
 
 import 'package:base64_encode_decode/AppConstant.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'Base64Decoder.dart';
@@ -37,8 +36,6 @@ class _Base64DecodePageState extends State<Base64DecodePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Base64 Decode', style: TextStyle(color: textColor, fontSize: 40, fontWeight: FontWeight.bold)),
-              Divider(),
               Padding(padding: EdgeInsets.all(10)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -119,7 +116,6 @@ class _Base64DecodePageState extends State<Base64DecodePage> {
                               reader.readAsText(file);
 
                               reader.onLoadEnd.listen((event) {}).onData((data) async {
-                                print('onLoadEnd');
                                  decodedTextAreaElement.value = reader.result.toString();
                                 textAreaElement.value =
                                     await Base64Decoder.decodeBase64ToText(decodedTextAreaElement.value!)
@@ -193,7 +189,7 @@ class _Base64DecodePageState extends State<Base64DecodePage> {
                     height: 50,
                     color: Colors.white,
                     onPressed: () async {
-                      if(textAreaElement.value!=null)
+                      if(textAreaElement.value!.isNotEmpty)
                       html.AnchorElement()
                         ..href = '${Uri.dataFromString(textAreaElement.value!, mimeType: 'text/plain', encoding: convert.utf8)}'
                         ..download = 'base64-decode-navoki.com.txt'

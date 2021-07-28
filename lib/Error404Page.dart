@@ -1,11 +1,11 @@
 import 'dart:html' as html;
 import 'dart:ui' as ui;
 
-class Error404Page {
+class ErrorPage {
   String tagName = 'error-404';
-  Error404Page.create() {
+  ErrorPage.create() {
     html.IFrameElement iFrameElement = html.IFrameElement();
-    iFrameElement.src="https://navoki.com/error-404";
+    iFrameElement.src="https://navoki.com";
     ui.platformViewRegistry.registerViewFactory(tagName, (int id) => iFrameElement);
   }
 }
